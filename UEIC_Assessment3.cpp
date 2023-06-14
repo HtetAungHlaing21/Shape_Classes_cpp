@@ -8,12 +8,31 @@ private:
     int y;
 public:
     Coordinates(int x, int y){}  //Constructor
-    int getX(){}
-    int getY(){}
+    //Get methods
+    int getX(){ return x; }
+    int getY(){ return y; }
+    //Other methods
     double distance(Coordinates p){}
-    void translate(int dx, int dy){}
-    void scale(int factor, bool sign){}
-    string display(){}
+    void translate(int dx, int dy)
+    {
+        x += dx;
+        y += dy;
+    }
+    void scale(int factor, bool sign)
+    {
+        if (sign == true) {
+            x *= factor;
+            y *= factor;
+        }
+        else {
+            x /= factor;
+            y /= factor;
+        }
+    }
+    string display()
+    {
+        return "X = " + to_string(x) + "\nY = " + to_string(y);
+    }
 };
 
 class Shape
@@ -22,10 +41,10 @@ private:
     Coordinates position;
     int sides;
 public:
-    Shape(int noOfSides, Coordinates &coord){} //Constructor
+    Shape(int noOfSides, Coordinates shapeCoord){} //Constructor
     Coordinates getCoordinates(){}
     int getSides(){}
-    void setCoordinates(Coordinates &newcoord){}
+    void setCoordinates(Coordinates newcoord){}
     void translate(int dx, int dy){}
     void scale(int scale, bool sign){}
     double getArea(){}
@@ -40,11 +59,20 @@ private:
     int width;
     int length;
 public:
-    Rectangle(){} //Constructor
-    double getArea(){}
-    double getParameter(){}
+    Rectangle(int w, int l){ width = w; length = l; } //Constructor
+    double getArea()
+    {
+        return length * width;
+    }
+    double getParameter()
+    {
+        return (2 * length) + (2 * width)
+    }
     void scale(int factor, bool sign){}
-    string display(){}
+    string display()
+    {
+        return "Name: Rectangle \nLength: " + to_string(length) + "\nWidth: " + to_string(width) + "\nArea: " + to_string(getArea()) + "\nParameter: " + to_string(getParameter());
+    }
 };
 
 class Square : public Shape
@@ -52,11 +80,14 @@ class Square : public Shape
 private:
     int side;
 public:
-    Square(){} //Constructor
-    double getArea(){}
-    double getParameter(){}
+    Square(int s){ side = s; } //Constructor
+    double getArea(){ return side * side; }
+    double getParameter(){ return 4 * side; }
     void scale(int factor, bool sign){}
-    string display(){}
+    string display()
+    {
+        return "Name: Square \nSide: " + to_string(side) + "\nArea: " + to_string(getArea()) + "\nParameter: " + to_string(getParameter());
+    }
 };
 
 class Circle : public Shape
@@ -64,26 +95,30 @@ class Circle : public Shape
 private:
     int radius;
 public:
-    Circle(){} //Constructor
-    double getArea(){}
-    double getParameter(){}
+    Circle(int r){ radius = r; } //Constructor
+    double getArea(){ return 3.14 * radius * radius; }
+    double getParameter(){ return 2 * 3.14 * radius; }
     void scale(int factor, bool sign){}
-    string display(){}
+    string display()
+    {
+        return "Name: Circle \nRadius: " + to_string(radius) + "\nArea: " + to_string(getArea()) + "\nParameter: " + to_string(getParameter());
+    }
 };
 
 class Triangle : public Shape
 {
 private:
-    int firstPoint[2];
-    int secondPoint[2];
-    int thirdPoint[2];
+
 public:
     Triangle(){} //Constructor
     double getArea(){}
     double getParameter(){}
     void translate(int dx, int dy){}
     void scale(int factor, bool sign){}
-    string display(){}
+    string display()
+    {
+        return "Name: Triangle \nLength of vertex 1: " + to_string() + "\nLength of vertex 2: " + to_string() + "\nLength of vertex 3: " + to_string() + "\nArea: " + to_string(getArea()) + "\nParameter: " + to_string(getParameter());
+    }
 };
 
 class ShapeList
