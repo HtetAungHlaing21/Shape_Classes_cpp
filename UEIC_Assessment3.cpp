@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 class Coordinates
@@ -7,12 +8,20 @@ private:
     int x;
     int y;
 public:
-    Coordinates(int x, int y){}  //Constructor
+    Coordinates(int input_1, int input_2) //Constructor
+    {
+        x = input_1;
+        y = input_2;
+    }
     //Get methods
     int getX(){ return x; }
     int getY(){ return y; }
+
     //Other methods
-    double distance(Coordinates p){}
+    double distance(Coordinates p)
+    {
+        return sqrt(pow(p.x-x, 2) + pow(p.y-y, 2));
+    }
     void translate(int dx, int dy)
     {
         x += dx;
@@ -34,7 +43,7 @@ public:
         return "X = " + to_string(x) + "\nY = " + to_string(y);
     }
 };
-
+/*
 class Shape
 {
 private:
@@ -151,11 +160,15 @@ public:
         cout<<"0. Quit program"<<endl;
     }
 };
-
+*/
 int main()
 {
     //Creating Objects
-    Coordinates coordinates;
+    Coordinates p1(2,5);
+    Coordinates p2(2,7);
+
+    cout<<p2.distance(p1);
+    /*
     Shape shape;
     ShapeList shapelist;
     ShapeManagement shapeManagement;
@@ -166,5 +179,6 @@ int main()
     shapeManagement.showMenu();
     cout<<"Enter your option."
     cin>>option;
+    */
     return 0;
 }
