@@ -1,33 +1,30 @@
-#include <iostream>
-#include <cmath>
-#include <vector>
+//Assessment 3 (Managing Shapes in a C++ Program)
+
+//Header Files
+#include <iostream> //For basic input output stream
+#include <cmath>  //For math functions
+#include <vector> //For vectors (Storing the shapes)
 using namespace std;
 
-class Coordinates
+class Coordinates  //Coordinates Class
 {
 public:
-    int x, y;
-    Coordinates(int input_1 = 0, int input_2 = 0)
+    int x, y; //x and y attributes
+    Coordinates(int input_1 = 0, int input_2 = 0) //Constructor
     {
         x = input_1;
         y = input_2;
     }
-
-    bool operator ==(const Coordinates& other) const
-    {
-        return (x == other.x && y == other.y);
-    }
-
-    double distance(Coordinates p)
+    double distance(Coordinates p) //Method to find the distance between two points
     {
         return sqrt(pow(p.x-x, 2) + pow(p.y-y, 2));
     }
-    void translate(int dx, int dy)
+    void translate(int dx, int dy) //Method to translate a point
     {
         x += dx;
         y += dy;
     }
-    void scale(int factor, bool sign)
+    void scale(int factor, bool sign) //Method to scale a point
     {
         if (sign)
         {
@@ -40,58 +37,52 @@ public:
             y /= factor;
         }
     }
-    string display()
+    string display() //Method to display x and y values
     {
         return "X = " + to_string(x) + "\nY = " + to_string(y);
     }
 };
 
-class Shape
+class Shape  //Shape Class
 {
 public:
-    Coordinates center;
-    int sides;
-    Shape(Coordinates input_1, int input_2)
+    Coordinates center; //Center of a shape
+    int sides; //Number of sides
+    Shape(Coordinates input_1, int input_2) //Constructor
     {
         center = input_1;
         sides = input_2;
     }
-    bool operator ==(const Shape& other) const
-    {
-        return (center == other.center);
-    }
-    void translate(int dx, int dy)
+    void translate(int dx, int dy) //Method to translate a shape
     {
         center.translate(dx, dy);
     };
-    virtual void scale(int factor, bool sign) {};
-    virtual double getArea() {};
-    virtual double getParameter() {};
-    virtual void display(string position) {};
+    //Virtual methods to be overridden in the child classes
+    virtual void scale(int factor, bool sign) = 0;
+    virtual double getArea() = 0;
+    virtual double getParameter() = 0;
+    virtual void display(string position) = 0 ;
 };
 
-class Rectangle : public Shape
+class Rectangle : public Shape //Rectangle class inherited from Shape class
 {
-public:
+public:  //Width, length attributes
     int width;
     int length;
-    double area, parameter;
-    Rectangle(int w, int l, Coordinates p):Shape(p, 4)
+    Rectangle(int w, int l, Coordinates p):Shape(p, 4) //Constructor
     {
         width = w;
         length = l;
     }
-    double getArea()
+    double getArea() //Method to calculate the area of a rectangle
     {
-        area = length * width;
-        return area;
+        return length * width;
     }
-    double getParameter()
+    double getParameter() //Method to calculate the perimeter of a rectangle
     {
-        parameter = (2 * length) + (2 * width);
-        return parameter;
+        return (2 * length) + (2 * width);
     }
-    void scale(int factor, bool sign)
+    void scale(int factor, bool sign) //Method to scale a rectangle
     {
         if (sign)
         {
@@ -104,7 +95,7 @@ public:
             length /= factor;
         }
     }
-    void display(string position)
+    void display(string position) //Method to display the information of a rectangle
     {
         cout<<"Name: Rectangle"<<endl;
         cout<<"Position: "<< position <<endl;
@@ -112,26 +103,23 @@ public:
     }
 };
 
-class Square : public Shape
+class Square : public Shape //Square class inherited from Shape class
 {
-public:
+public: //Side attribute
     int side;
-    double area, parameter;
-    Square(int s, Coordinates p):Shape(p, 4)
+    Square(int s, Coordinates p):Shape(p, 4) //Constructor
     {
         side = s;
     }
-    double getArea()
+    double getArea() //Method to calculate the area of a square
     {
-        area = side * side;
-        return area;
+        return side * side;
     }
-    double getParameter()
+    double getParameter() //Method to calculate the perimeter of a square
     {
-        parameter = 4 * side;
-        return parameter;
+        return 4 * side;
     }
-    void scale(int factor, bool sign)
+    void scale(int factor, bool sign) //Method to scale a square
     {
         if (sign)
         {
@@ -142,7 +130,7 @@ public:
             side /= factor;
         }
     }
-    void display(string position)
+    void display(string position) //Method to display the information of a square
     {
         cout<<"Name: Square"<<endl;
         cout<<"Position: " << position <<endl;
@@ -150,26 +138,23 @@ public:
     }
 };
 
-class Circle : public Shape
+class Circle : public Shape //Circle class inherited from Shape class
 {
-public:
+public: //Radius attribute
     int radius;
-    double area, parameter;
-    Circle(int r, Coordinates p):Shape(p, 0)
+    Circle(int r, Coordinates p):Shape(p, 0) //Constructor
     {
         radius = r;
     }
-    double getArea()
+    double getArea()//Method to calculate the area of a circle
     {
-        area = 3.14 * radius * radius;
-        return area;
+        return 3.14 * radius * radius;
     }
-    double getParameter()
+    double getParameter() //Method to calculate the perimeter of a circle
     {
-        parameter = 2 * 3.14 * radius;
-        return parameter;
+        return 2 * 3.14 * radius;
     }
-    void scale(int factor, bool sign)
+    void scale(int factor, bool sign) //Method to scale a circle
     {
         if (sign)
         {
@@ -180,7 +165,7 @@ public:
             radius /= factor;
         }
     }
-    void display(string position)
+    void display(string position) //Method to display the information of a circle
     {
         cout<<"Name: Circle"<<endl;
         cout<<"Position: " << position <<endl;
@@ -188,52 +173,56 @@ public:
     }
 };
 
-class Triangle : public Shape
+class Triangle : public Shape //Triangle class inherited from Shape class
 {
-public:
-    Coordinates p1, p2, p3;
-    double a, b, c, s;
-    double area, parameter;
-    Triangle(Coordinates input_1, Coordinates input_2, Coordinates input_3, Coordinates input_4):Shape(input_4, 3)
+public: //Attributes
+    Coordinates p1, p2, p3; //Three vertexes
+    double a, b, c; //Three lengths
+    Triangle(Coordinates input_1, Coordinates input_2, Coordinates input_3, Coordinates input_4):Shape(input_4, 3) //Constructor
     {
         p1 = input_1;
         p2 = input_2;
         p3 = input_3;
+        getCenter();
+        cout<<"\nThe center of the triangle: "<<round(center.x)<<" , "<<round(center.y)<<endl;
+        getLength();
+    }
+    void getLength() //Method to find the length of three sides
+    {
         a = p1.distance(p2);
         b = p2.distance(p3);
         c = p3.distance(p1);
     }
-    double getArea()
+    void getCenter() //Method to find the center of a triangle
     {
-        s = (a + b + c)/2;
-        area = sqrt(s*(s-a)*(s-b)*(s-c));
-        return area;
+        center.x = (p1.x + p2.x + p3.x)/3;
+        center.y = (p1.y + p2.y + p3.y)/3;
     }
-    double getParameter()
+    double getArea() //Method to find the area of a triangle
     {
-        parameter = a + b + c;
-        return parameter;
+        double s = (a + b + c)/2;
+        return sqrt(s*(s-a)*(s-b)*(s-c));
     }
-    void translate(int dx, int dy)
+    double getParameter() //Method to find the parameter of a triangle
+    {
+        return  a + b + c;
+    }
+    void translate(int dx, int dy) //Method to translate a triangle
     {
         p1.translate(dx, dy);
         p2.translate(dx, dy);
         p3.translate(dx, dy);
-        center.x = (p1.x + p2.x + p3.x)/3;
-        center.y = (p1.y + p2.y + p3.y)/3;
+        getCenter();
     }
-    void scale(int factor, bool sign)
+    void scale(int factor, bool sign) //Method to scale a triangle
     {
         p1.scale(factor, sign);
         p2.scale(factor, sign);
         p3.scale(factor, sign);
-        center.x = (p1.x + p2.x + p3.x)/3;
-        center.y = (p1.y + p2.y + p3.y)/3;
-        a = p1.distance(p2);
-        b = p2.distance(p3);
-        c = p3.distance(p1);
+        getCenter();
+        getLength();
     }
-    void display(string position)
+    void display(string position) //Method to display a triangle
     {
         cout<<"Name: Triangle"<<endl;
         cout<<"Position: " << position <<endl;
@@ -242,87 +231,71 @@ public:
     }
 };
 
-class ShapeList
+class ShapeList //Shape List Class
 {
-public:
-    vector <Shape*> listofShapes;
-    int shapeNum;
+public: //Attributes
+    vector <Shape*> listofShapes; //A vector to store the shapes
+
+    //Temporary variables to use in the methods
+    int shapeNum, temp, width, length, side, radius;
     float x,y, coor[3][2], center_x, center_y;
-    int width, length, side, radius;
     char ans;
     bool deleted, found = false;
-    void addShape()
+
+    Coordinates askCoordinates() //Method to ask the coordinates of the center (used in adding, removing, finding shapes)
+    {
+        cout<<"Enter x coordinate of the center: ";
+        cin>>x;
+        cout<<"Enter y coordinate of the center: ";
+        cin>>y;
+        Coordinates center(x,y);
+        return center;
+    }
+    int askDimensions(string feature) //Method to ask the dimensions of width, length, side and radius
     {
         do
         {
-            cout<<"\nWhat shape do you want to add?\nType '1' for rectangle, '2' for square, '3' for circle, '4' for triangle. '0' to stop adding shapes. \nYour answer: ";
+            cout<<"Enter the "<< feature <<": ";
+            cin>>temp;
+            if (temp<=0)
+            {
+                cout<<"The "<< feature <<" must be greater than 0"<<endl;
+            }
+        }
+        while(temp<=0);
+        return temp;
+    }
+    void addShape() //Method to add a shape into listofShapes
+    {
+        do
+        {
+            cout<<"\nWhat shape do you want to add?\nType '1' for rectangle, '2' for square, '3' for circle, '4' for triangle. \nYour answer: ";
             cin>>shapeNum;
             if (shapeNum == 1 || shapeNum == 2 || shapeNum == 3 )
             {
-                cout<<"Enter x coordinate of center: ";
-                cin>>x;
-                cout<<"Enter y coordinate of center: ";
-                cin>>y;
-                Coordinates center(x,y);
+                Coordinates center = askCoordinates();
                 switch (shapeNum)
                 {
                 case 1:
                 {
-                    do
-                    {
-                        cout<<"Enter the width of the rectangle: ";
-                        cin>>width;
-                        if (width<=0)
-                        {
-                            cout<<"Width must be greater than 0"<<endl;
-                        }
-                    }
-                    while(width<=0);
-                    do
-                    {
-                        cout<<"Enter the length of the rectangle: ";
-                        cin>>length;
-                        if (length<=0)
-                        {
-                            cout<<"Length must be greater than 0"<<endl;
-                        }
-                    }
-                    while(length<=0);
-
+                    width = askDimensions("width");
+                    length = askDimensions("length");
                     listofShapes.push_back(new Rectangle(width, length, center));
-                    cout<<"Shape Successfully Added!"<<endl;
+                    cout<<"A rectangle Successfully Added!"<<endl;
                     break;
                 }
                 case 2:
                 {
-                    do
-                    {
-                        cout<<"Enter the side of the square: ";
-                        cin>>side;
-                        if (side<=0)
-                        {
-                            cout<<"Side must be greater than 0"<<endl;
-                        }
-                    }
-                    while(side<=0);
+                    side = askDimensions("side");
                     listofShapes.push_back(new Square(side, center));
-                    cout<<"Shape Successfully Added!"<<endl;
+                    cout<<"A square Successfully Added!"<<endl;
                     break;
                 }
                 case 3:
                 {
-                    do
-                    {
-                        cout<<"Enter the radius of the circle: ";
-                        cin>>radius;
-                        if (radius<=0)
-                        {
-                            cout<<"Radius must be greater than 0"<<endl;
-                        }
-                    }
-                    while(radius<=0);
+                    radius = askDimensions("radius");
                     listofShapes.push_back(new Circle(radius, center));
-                    cout<<"Shape Successfully Added!"<<endl;
+                    cout<<"A circle Successfully Added!"<<endl;
                     break;
                 }
                 default:
@@ -330,56 +303,42 @@ public:
                     cout<<"Error"<<endl;
                     break;
                 }
-
                 }
             }
 
             else if (shapeNum == 4)
             {
-                for (int i=1; i<=3; ++i)
+                for (int i=0; i<3; ++i)
                 {
-                    cout<<"Enter x coordinate for vertex "<<i<<": ";
-                    cin>>coor[i-1][0];
-                    cout<<"Enter y coordinate for vertex "<<i<<": ";
-                    cin>>coor[i-1][1];
+                    cout<<"Enter x coordinate for vertex "<<i+1<<": ";
+                    cin>>coor[i][0];
+                    cout<<"Enter y coordinate for vertex "<<i+1<<": ";
+                    cin>>coor[i][1];
                 }
                 Coordinates p1(coor[0][0], coor[0][1]);
                 Coordinates p2(coor[1][0], coor[1][1]);
                 Coordinates p3(coor[2][0], coor[2][1]);
-                center_x = (coor[0][0] + coor[1][0] + coor[2][0])/3;
-                center_y = (coor[0][1] + coor[1][1] + coor[2][1])/3;
-                Coordinates center(center_x, center_y);
-                listofShapes.push_back(new Triangle(p1, p2, p3, center));
-                cout<<"Shape Successfully Added!"<<endl;
-                cout<<"The center of the triangle: "<<round(center_x)<<" , "<<round(center_y)<<endl;
+                listofShapes.push_back(new Triangle(p1, p2, p3, (0,0)));
+                cout<<"A triangle Successfully Added!"<<endl;
             }
-
-            else if (shapeNum == 0)
-            {
-                break;
-            }
-
             else
             {
                 cout<<"Invalid Number! Type the number again!"<<endl;
             }
-
+            cout<<"Do you want to continue adding shapes? If yes, type 'y', if no, type 'n'. Your answer: ";
+            cin>>ans;
         }
-        while(shapeNum != 0);
+        while(ans != 'n');
 
     }
-    void removeShape()
+    void removeShape() //Method to remove a shape from the listofShapes
     {
         do
         {
-            cout<<"Enter the x coordinate (center) of the shape: ";
-            cin>>x;
-            cout<<"Enter the y coordinate (center) of the shape: ";
-            cin>>y;
-            Coordinates center_f(x,y);
+            Coordinates center_f = askCoordinates();
             for (vector<Shape*>::iterator pObj = listofShapes.begin(); pObj != listofShapes.end(); ++pObj)
             {
-                if (center_f == (*pObj)->center)
+                if (center_f.x == (*pObj)->center.x && center_f.y == (*pObj)->center.y)
                 {
                     listofShapes.erase(pObj);
                     cout<<"Successfully Deleted!"<<endl;
@@ -398,18 +357,14 @@ public:
         while (ans != 'n');
 
     }
-    void getShape()
+    void getShape() //Method to find the shape by position and give the details
     {
         do
         {
-            cout<<"Enter the x coordinate (center) of the shape: ";
-            cin>>x;
-            cout<<"Enter the y coordinate (center) of the shape: ";
-            cin>>y;
-            Coordinates center_f(x,y);
+            Coordinates center_f = askCoordinates();
             for (vector<Shape*>::iterator pObj = listofShapes.begin(); pObj != listofShapes.end(); ++pObj)
             {
-                if (center_f == (*pObj)->center)
+                if (center_f.x == (*pObj)->center.x && center_f.y == (*pObj)->center.y)
                 {
                     string position = "(" + to_string((*pObj)->center.x) + ", " + to_string((*pObj)->center.y) + ")";
                     (*pObj)->display(position);
@@ -430,18 +385,14 @@ public:
 
     }
 
-    void areaNpara()
+    void areaNpara() //Method to find the shape by position and give the area and parameter
     {
         do
         {
-            cout<<"Enter the x coordinate (center) of the shape: ";
-            cin>>x;
-            cout<<"Enter the y coordinate (center) of the shape: ";
-            cin>>y;
-            Coordinates center_f(x,y);
+            Coordinates center_f = askCoordinates();
             for (vector<Shape*>::iterator pObj = listofShapes.begin(); pObj != listofShapes.end(); ++pObj)
             {
-                if (center_f == (*pObj)->center)
+                if ((center_f.x == (*pObj)->center.x && center_f.y == (*pObj)->center.y))
                 {
                     cout<<"Area of the shape: "<<(*pObj)->getArea()<<endl;
                     cout<<"Perimeter of the shape: "<<(*pObj)->getParameter()<<endl;
@@ -462,7 +413,7 @@ public:
 
 
     }
-    void translateShapes()
+    void translateShapes() //Method to translate all shapes
     {
         cout<<"Enter the translation of x coordinate: ";
         cin>>x;
@@ -477,7 +428,7 @@ public:
         cout<<"\nSuccessfully Translated all shapes!"<<endl;
     }
 
-    void scaleShapes()
+    void scaleShapes() //Method to scale all shapes
     {
         bool sign;
         do
@@ -511,7 +462,7 @@ public:
     }
 
 
-    void displayAll()
+    void displayAll() //Method to display about all shapes
     {
         for (vector<Shape*>::iterator pObj = listofShapes.begin(); pObj != listofShapes.end(); ++pObj)
         {
@@ -523,12 +474,12 @@ public:
 
 };
 
-class ShapeManagement
+class ShapeManagement //Shape Management Class
 {
 public:
-    void showMenu()
+    void showMenu() //Method to display the menu
     {
-        cout<<endl;
+        cout<<"Choose an action from the menu."<<endl;
         cout<<"1. Add a shape"<<endl;
         cout<<"2. Remove a shape by position"<<endl;
         cout<<"3. Get information about a shape by position"<<endl;
@@ -542,15 +493,12 @@ public:
 
 int main()
 {
-    int shapeNum, option;
-
-
+    int option;
     ShapeList shapeList;
     ShapeManagement menu;
     menu.showMenu();
     do
     {
-
         cout<<"\nEnter your option: ";
         cin>>option;
         switch (option)
@@ -588,6 +536,11 @@ int main()
         case 7:
         {
             shapeList.scaleShapes();
+            break;
+        }
+        case 0:
+        {
+            cout<<"Thanks for using this program."<<endl;
             break;
         }
         default:
